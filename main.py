@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from dataset import FontDataset
-from model import DeepFont
+from model import DeepFont, ModelName, fetch_efficientnet_b3, fetch_vgg16
 from pytorchtools import EarlyStopping
 from transform import ImageTranform
 
@@ -61,6 +61,7 @@ train_image_paths, test_image_paths = train_test_split(
 )
 batch_size = 256
 num_epochs = 100
+model_name = ModelName.efficientnetB3
 
 
 def train_model(
@@ -145,16 +146,27 @@ def main() -> None:
     val_dataloader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
     dataloaders = {"train": train_dataloader, "val": val_dataloader}
 
-    net = DeepFont()
+    if model_name == ModelName.DeepFont:
+        print("model: DeepFont")
+        net = DeepFont()
+        checkpoint_path = "deepfont_checkpoint.pt"
+    elif model_name == ModelName.VGG16:
+        print("model: VGG16")
+        net = fetch_vgg16()
+        checkpoint_path = "vgg16_checkpoint.pt"
+    elif model_name == ModelName.efficientnetB3:
+        print("model: efficientnetB3")
+        net = fetch_efficientnet_b3()
+        checkpoint_path = "efficientnetb3_checkpoint.pt"
+
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(
         params=net.parameters(), lr=0.01, momentum=0.9, weight_decay=0.0005
     )
 
-    print("training")
-    early_stopping = EarlyStopping(
-        patience=3, verbose=True, path="deepfont_checkpoint.pt"
-    )
+    print(f"training")
+
+    early_stopping = EarlyStopping(patience=3, verbose=True, path=checkpoint_path)
     train_model(net, dataloaders, criterion, optimizer, num_epochs, early_stopping)
 
 
