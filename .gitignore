@@ -141,4 +141,4 @@ cython_debug/
 .vscode/
 .env
 .venv/
-*checkpoint.pt
+adhock

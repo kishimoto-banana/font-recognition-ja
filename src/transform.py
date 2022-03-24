@@ -20,6 +20,7 @@ class ImageTranform:
                 [
                     A.GaussNoise(var_limit=3, mean=0, p=1),
                     A.GaussianBlur(sigma_limit=[2.5, 3.5], p=1),
+                    # A.Affine(scale=1.0, translate_percent=0, rotate=(-10, 10), shear=0, p=1),
                     A.Normalize(mean=0, std=1, max_pixel_value=255, p=1),
                     ToTensorV2(),
                 ]

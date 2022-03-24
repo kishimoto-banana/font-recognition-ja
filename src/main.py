@@ -13,7 +13,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from dataset import FontDataset
+from src.dataset import FontDataset
 from model import DeepFont, ModelName, fetch_efficientnet_b3, fetch_vgg16
 from pytorchtools import EarlyStopping
 from transform import ImageTranform

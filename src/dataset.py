@@ -31,7 +31,7 @@ class FontDataset(Dataset):
         if img.size[0] < 105:
             img = img.resize((105, 105))
 
-        img_transformed = self.transform(np.array(img))
+        img_transformed = self.transform(np.array(img), self.phase)
         patch_x = random.randint(0, img_transformed.shape[-1] - 105)
         patch = img_transformed[:, :, patch_x : patch_x + 105]
 
